@@ -1,0 +1,20 @@
+<template>
+    <lightning-card>
+
+        <lightning-input type="checkbox" label="show div tag" onchange={changeHandler}></lightning-input>
+        <template if:true={displayCondition}>
+            <div> Conditional page</div>
+        </template>
+        <h1>for each Example</h1>
+
+        <template for:each={cityList} for:item="city">
+            <p key={city}> {city}</p>
+        </template>
+
+        <h1>iterator Example</h1>
+        <template iterator:it={cityList}>
+            <p key={it.value}> {it.value}</p>
+        </template>
+
+    </lightning-card>
+</template>
