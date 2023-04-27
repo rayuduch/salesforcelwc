@@ -29,3 +29,4 @@ Forms
 pagenavigation: navigation.html
 Third party Library
 Test case for meetingrooms
+debug salesforce git link: https://github.com/salesforce/sfdx-lwc-jest
