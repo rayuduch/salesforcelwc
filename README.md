@@ -26,3 +26,4 @@ public properties: meetingRoom.html
 public boolean properties: meetingRooms.html
 local developement server
 Forms
+pagenavigation: navigation.html
