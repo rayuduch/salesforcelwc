@@ -398,3 +398,70 @@ do{
 } while(fizzBuss <= 100);{
     
 }
+
+
+<!-- For loop -->
+
+Integer n=5;
+    for(Integer row=0; row<=n; row++){
+       String pattern = '';
+            for(Integer column=0; column<=row; column++){
+                 pattern = pattern + '* ' ;
+            }
+        System.debug(pattern);
+    }
+
+
+<!-- Break -->
+Integer gooseBumpsAfter = 4;
+Integer n =1000;
+
+for(Integer i=0; i<n;i++){
+    System.debug('Listening to song ' + i + ' times ');    
+    if(i == gooseBumpsAfter){
+        break;
+    }
+    }
+
+<!-- Continue -->
+List<String> days = new List<String>{'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'};
+
+for(Integer i=0; i < days.size();i++){
+    if(days.get(i) == 'Tuesday'){
+        continue;
+    }
+    System.debug('It is ' + days.get(i)+'Eat EGG');
+}
+
+
+List<Integer> rollNumbers = new List<Integer>{1101,1234,1111,1542};
+    
+    for(Integer rollNumber : rollNumbers){
+        System.debug('Student RN: ' + rollNumber);
+    }
+
+<!-- Method Syntax -->
+public - Access modifier (Optional)
+static - Special keyword (Optional)
+Integer - Return Type (Required)
+add - Method name (Required)
+Integer num1, Integer num2 - parameters (optional)
+   <!--Method body open -->
+   Integer sum = num1 + num2;
+   return sum;
+   <!-- Method body close -->
+
+   Must for all return types except void
+   
+    public static Integer add(Integer num1, Integer num2){
+
+        Integer sum = num1 + num2;
+        return sum;
+    }
+
+<!-- Life cycle -->
+1. Static Initilization Block
+2. Initilization Block
+3. Blank Constructor
+4. Parameterized Constructor
+
