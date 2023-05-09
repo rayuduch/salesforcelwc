@@ -705,3 +705,84 @@ delete opp;
 List<SObject> opps = Database.query('SELECT Id, Name, StageName FROM Opportunity WHERE isDeleted=true ALL ROWS');
 // undelete opportunity
 undelete opps;
+
+
+<!-- Exception Handling -->
+
+
+//Double result = 10/0;
+//System.debug('Result: '+result);
+
+// DML Exception
+//Account accRec = new Account();
+//insert accRec;
+
+
+// Null Pointer Exception
+//String str;
+//System.debug(str.toLowerCase());
+
+
+// throw an exception Programmatically
+throw new NullPointerException();
+
+
+<!-- Try, Catch, Finally -->
+
+System.debug('Before Exception');
+try{
+    // Math Exception
+    Double result = 10/0;
+    System.debug('Result: '+result);
+
+    // DML Exception
+    // Account accRec = new Account();
+    // insert accRec;
+    System.debug('Empty try block ');
+} catch(Exception e){
+    System.debug('Caught generic exception ');
+} finally {
+    System.debug('finally called ');
+}
+System.debug('After Exception');
+
+<!-- Exception methods -->
+System.debug('Before Exception');
+try{
+    // Math Exception
+    Double result = 10/0;
+    System.debug('Result: '+result);
+
+    // DML Exception
+    // Account accRec = new Account();
+    // insert accRec;
+    System.debug('Empty try block ');
+} catch(Exception e){
+    system.debug('Cause '+e.getCause());
+    system.debug('Message '+e.getMessage());
+    system.debug('Line Number '+e.getLineNumber());
+    system.debug('Stack Trace '+e.getStackTraceString ());
+} finally {
+    System.debug('finally called ');
+}
+System.debug('After Exception');
+
+
+
+<!-- Throw a custom exception -->
+// Math Exception
+//Double result = 10/0;
+//System.debug('Result: '+result);
+
+// DML Exception
+//Account accRec = new Account();
+//insert accRec;
+
+
+// Null Pointer Exception
+//String str;
+//System.debug(str.toLowerCase());
+
+
+// throw an exception Programmatically
+throw new NullPointerException();
