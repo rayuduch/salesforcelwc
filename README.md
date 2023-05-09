@@ -465,3 +465,99 @@ Integer num1, Integer num2 - parameters (optional)
 3. Blank Constructor
 4. Parameterized Constructor
 
+
+<!-- Relationship Queries -->
+
+// Contact is a parent object of case
+// Account is a parent object of Contact
+
+
+// Retrieve Name, Department and Title of all contacts
+SELECT Name, Department, Title FROM Contact
+
+// Retrieve all Cases (CaseNumber, Subject) raised by the contact
+SELECT Name, Department, Title, (Select CaseNumber, Subject FROM Cases) FROM Contact
+
+// Get parent Account's Name, Rating for each Contact
+SELECT Name, Department, Title, (Select CaseNumber, Subject FROM Cases), Account.Name, Account.Rating FROM Contact
+
+// Make sure Account fields are the initial columns in results
+SELECT Account.Name, Account.Rating, Name, Department, Title, (Select CaseNumber, Subject FROM Cases) FROM Contact
+
+// Retrieve only those records where Account Rating is Hot
+SELECT Account.Name, Account.Rating, Name, Department, Title, (Select CaseNumber, Subject FROM Cases) FROM Contact WHERE Account.Rating='Hot'
+
+// Sort results by Contact Name
+SELECT Account.Name, Account.Rating, Name, Department, Title, (Select CaseNumber, Subject FROM Cases) FROM Contact WHERE Account.Rating='Hot' ORDER BY Name
+
+// Only retrieve open cases (use IsClosed Checkbox field value)
+SELECT Account.Name, Account.Rating, Name, Department, Title, (Select CaseNumber, Subject FROM Cases WHERE IsClosed=false) FROM Contact WHERE Account.Rating='Hot' ORDER BY Name
+
+// Add one more filter condition, Contact Department must be equals to 'Technology'
+SELECT Account.Name, Account.Rating, Name, Department, Title, (Select CaseNumber, Subject FROM Cases WHERE IsClosed=false) FROM Contact WHERE Account.Rating='Hot' AND Department='Technology' ORDER BY Name
+
+
+<!-- SOQL in APEX -->
+List<Account> accounts = [SELECT Name, Phone FROM Account];
+
+for(Account account:accounts){
+    System.debug('Account Name: ' +account.Name + 'Account Phone: '+account.phone);
+}
+
+<!-- Using Map in APEX -->
+Map<Id,Account> accountsMap = new Map<Id, Account>( [SELECT Name, Phone FROM Account]);
+
+for(Account account:accountsMap.values()){
+    System.debug('Account Name: ' +account.Name + 'Account Phone: '+account.phone);
+}
+
+<!-- Using Custom object -->
+List<Invoice__c> invoices = [SELECT Name FROM Invoice__c];
+
+for(Invoice__c invoice:invoices){
+    System.debug('Invoice Name: ' +invoice.Name);
+}
+
+<!-- SOQL Relationships in APEX -->
+<!-- use list of 'Contact' to store the query result
+you cannot use list of 'Case', or list of 'Account' as
+our main object is 'Contact' -->
+List<Contact> contacts = [SELECT Account.Name, Account.Rating, Name, Department, Title, (Select CaseNumber, Subject FROM Cases) FROM Contact ORDER BY Name];
+
+for(Contact con : contacts){
+    System.debug('Contact Name: '+con.Name+', Contact Department: '+con.Department+', Contact Title: '+con.Title+', Account Name: '+con.Account.Name+', Account Rating: '+con.Account.Rating);
+    // iterate over the child records (Cases)
+    for(Case caseObj : con.Cases){
+        System.debug('Case Number: '+caseObj.CaseNumber+', Case Subject:'+caseObj.Subject);
+    }
+}
+
+<!-- SOQL Bind Variables -->
+List<String> accountNames = new List<String>();
+accountNames.add('Sample SObject Account');
+accountNames.add('New Line Cinema');
+accountNames.add('SFDCFacts');
+accountNames.add('Burlington Textiles Corp of America');
+
+List<Account> accounts = [SELECT Id, Name, Phone, Rating FROM Account
+                         	WHERE Name IN :accountNames];
+System.debug('Accounts: '+accounts);
+System.debug('Accounts Size: '+accounts.size());
+
+<!-- SOQL Dynamic Queries -->
+
+String accountClass = 'Class3';
+
+String queryString = 'SELECT Id, Name, Phone, Rating FROM Account';
+
+if(accountClass == 'Class1'){
+    queryString += ' WHERE Rating=\'Hot\' AND Type=\'Prospect\'';
+} else if(accountClass == 'Class2'){
+    queryString += ' WHERE Rating=\'Warm\' AND Type=\'Other\'';
+} else {
+    queryString += ' WHERE Rating=\'Hot\'';
+}
+
+List<Account> accounts = Database.query(queryString);
+System.debug('Accounts '+accounts);
+System.debug('Accounts size '+accounts.size());
