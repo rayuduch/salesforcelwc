@@ -561,3 +561,147 @@ if(accountClass == 'Class1'){
 List<Account> accounts = Database.query(queryString);
 System.debug('Accounts '+accounts);
 System.debug('Accounts size '+accounts.size());
+
+<!-- DML -> Data Manipulation Language -->
+
+Database.insert(accounts, true) - Partial success not allowed
+
+Database.insert(accounts, falses) - Partial success is allowed
+
+insert accounts - Partial success not allowed
+<!-- Sobject get sobject -->
+
+// Retrieve all books and assign to a List collection
+List<SObject> books = [SELECT Name, Price__c, Author__r.Name FROM Book__c];
+for(SObject book : books){
+    System.debug('Book Name: '+String.valueOf(book.get('Name'))+' Book Price: '+(Decimal)book.get('Price__c')+ ' Book Author: '+ (String)book.getSObject('Author__r').get('Name'));
+}
+
+
+<!-- // create a new account sobject instance -->
+SObject accountRec = (SObject) Type.forName('Account').newInstance();
+// set field values
+accountRec.put('Name', 'Sample SObject Account');
+accountRec.put('Phone', '7697890786');
+// insert account record
+insert accountRec;
+
+
+/**
+ * DML CHALLENGE
+ * Create a new Account with the name “WingNut Films” and Rating “Warm”
+ * Create a new Opportunity “Lord Of The Rings”  for this Account with below field values
+ *                Stage > Qualification
+ *                Closed Date > Today
+ * Update Account Name to “New Line Cinema”
+ * Update Opportunity Stage to “Closed-Won”
+ * Delete the opportunity
+ * Undelete the opportunity
+ **/
+
+// create new instance of account object
+Account accRec = new Account(Name='WingNut Films', Rating='Warm');
+// insert the account
+insert accRec;
+
+
+// create opportunity record
+Account account = [SELECT Id FROM Account WHERE Name='WingNut Films' LIMIT 1];
+Opportunity opp = new Opportunity(Name='Lord Of The Rings', StageName='Qualification ', CloseDate=Date.today());
+opp.AccountId = account.Id;
+insert opp;
+
+// retrieve wingnut films account
+Account account = [SELECT Id, Name FROM Account WHERE Name='WingNut Films' LIMIT 1];
+// update the name
+account.Name = 'New Line Cinema';
+// update the account
+update account;
+
+Opportunity opp = [SELECT Id, Name, StageName FROM Opportunity WHERE Name='Lord Of The Rings' LIMIT 1];
+opp.StageName = 'Closed Won';
+update opp;
+
+// get opportunity record to delete
+Opportunity opp = [SELECT Id, Name, StageName FROM Opportunity WHERE Name='Lord Of The Rings' LIMIT 1];
+// delete opportunity
+delete opp;
+
+// get opportunity record to undelete
+List<Opportunity> opps = [SELECT Id, Name, StageName FROM Opportunity WHERE isDeleted=true ALL ROWS];
+// undelete opportunity
+undelete opps;
+
+
+<!-- Using Sobject -->
+
+/**
+ * DML CHALLENGE
+ * Create a new Account with the name “WingNut Films” and Rating “Warm”
+ * Create a new Opportunity “Lord Of The Rings”  for this Account with below field values
+ *                Stage > Qualification
+ *                Closed Date > Today
+ * Update Account Name to “New Line Cinema”
+ * Update Opportunity Stage to “Closed-Won”
+ * Delete the opportunity
+ * Undelete the opportunity
+ **/
+
+ 
+// create new instance of account sobject
+SObject accRec = (SObject) Type.forName('Account').newInstance();
+// adding field values
+accRec.put('Name', 'WingNut Films');
+accRec.put('Rating', 'Warm');
+// insert the sobject
+insert accRec;
+
+
+
+
+// get account record first to associate with opportunity
+SObject account = Database.query('SELECT Id FROM Account WHERE Name=\'WingNut Films\' LIMIT 1');
+// create new instance of opportunity sobject
+SObject opp = (SObject) Type.forName('Opportunity').newInstance();
+// adding field values
+opp.put('Name', 'Lord Of The Rings');
+opp.put('StageName', 'Qualification');
+opp.put('CloseDate', Date.today());
+opp.put('AccountId', account.Id);
+insert opp;
+
+
+
+
+// retrieve wingnut films account
+SObject account = Database.query('SELECT Id, Name FROM Account WHERE Name=\'WingNut Films\' LIMIT 1');
+// update the name
+account.put('Name', 'New Line Cinema');
+// update the account
+update account;
+
+
+
+
+// get the "Lord Of The Rings" opportunity
+SObject opp = Database.query('SELECT Id, Name, StageName FROM Opportunity WHERE Name=\'Lord Of The Rings\' LIMIT 1');
+opp.put('StageName', 'Closed Won');
+update opp;
+
+
+
+
+
+// get the "Lord Of The Rings" opportunity to delete
+SObject opp = Database.query('SELECT Id, Name, StageName FROM Opportunity WHERE Name=\'Lord Of The Rings\' LIMIT 1');
+// delete opportunity
+delete opp;
+
+
+
+
+
+// get the "Lord Of The Rings" opportunity to undelete
+List<SObject> opps = Database.query('SELECT Id, Name, StageName FROM Opportunity WHERE isDeleted=true ALL ROWS');
+// undelete opportunity
+undelete opps;
